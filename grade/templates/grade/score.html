@@ -1,0 +1,22 @@
+{% extends 'grade/layout.html' %}
+{% load grade_extras %}
+{% block title %}成績{% endblock %}
+{% block content %}
+<a class="lead" href="{% url 'home' %}">ホームに戻る</a><br>
+{% include 'mycomponents/testbutton.html' with text='成績！！！' %}<br>
+
+なんで全然できないんですかね <br>
+
+<p>
+  スコア一覧<br>
+  {% for s in scores %}
+    スコア <br>
+    id={{s.id}}, score={{s.score}} <br>
+    ここに画像 <br>
+    {% include 'mycomponents/linkbutton.html' with text="詳細" href='/scoredetail/'|addstr:s.id|addstr:'/' %}<br>
+  {% empty %}
+    <p>スコアが登録されていません</p>
+  {% endfor %}
+</p>
+
+{% endblock %}

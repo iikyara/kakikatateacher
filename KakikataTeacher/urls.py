@@ -1,0 +1,36 @@
+"""KakikataTeacher URL Configuration
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/3.1/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.conf.urls import include
+from django.contrib import admin
+from django.urls import path, include
+from django.contrib.auth import views
+
+from . import views as myViews
+
+urlpatterns = [
+    path('', include('grade.urls')),
+    path('registration/login/', views.LoginView.as_view(), name='login'),
+    path('registration/logout/', views.LogoutView.as_view(next_page="/"), name='logout'),
+    #path('registration/', include('django.contrib.auth.urls')),
+    path('auth/', include('social_django.urls', namespace='social')),
+    path('admin/', admin.site.urls),
+]
+
+'''
+<<<login>>>
+80% : https://qiita.com/moi1990sk/items/a849fca7acb29db95508
+20 % : https://tutorial-extensions.djangogirls.org/en/authentication_authorization/
+'''

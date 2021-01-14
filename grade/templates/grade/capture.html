@@ -1,0 +1,31 @@
+{% extends 'grade/layout.html' %}
+{% load static %}
+{% block title %}撮影{% endblock %}
+{% block content %}
+<a class="lead" href="{% url 'home' %}">ホームに戻る</a><br>
+{% include 'mycomponents/testbutton.html' with text="撮影！！！" %}<br>
+
+<p>
+  フォーム方式 <br>
+  <form id="imageform_form" enctype="multipart/form-data" method="POST">
+    <input type="file" name="pic" id="imageform_selector" dropzone="copy" required>
+    <label class="imageform_selector" for="imageform_selector" id="imageform_selector-label">ファイルを選択してください</label>
+  </form>
+</p>
+<p>
+  ここにビデオ
+  <video id="player" autoplay poster="{% static 'grade/image/capture_background.PNG' %}"></video>
+  エディター
+  <canvas id="snapshot" width="3000" height="2500"></canvas>
+</p>
+<p>
+  <button type="button" name="button" onclick="startScan();">撮影</button>
+  <button type="button" name="button" onclick="rotate(true)">画像を右に回転</button>
+  <button type="button" name="button" onclick="rotate(false)">画像を左に回転</button>
+</p>
+
+{% endblock %}
+
+{% block js_extends %}
+<script type="text/javascript" src="{% static 'grade/js/capture.js' %}"></script>
+{% endblock %}

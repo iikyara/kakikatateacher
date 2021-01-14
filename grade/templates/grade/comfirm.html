@@ -1,0 +1,6 @@
+{% extends 'grade/layout.html' %}
+{% block title %}確認{% endblock %}
+{% block content %}
+<a class="lead" href="{% url 'home' %}">ホームに戻る</a><br>
+{% include 'mycomponents/testbutton.html' with text="確認！！！" %}<br>
+{% endblock %}

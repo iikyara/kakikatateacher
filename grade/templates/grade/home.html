@@ -1,0 +1,29 @@
+{% extends 'grade/layout.html' %}
+{% load grade_extras %}
+{% block title %}HOME{% endblock %}
+{% block content %}
+<p class="display-4">Hello,
+  username : {{ user.username }}<br>
+  firstname : {{ user.first_name }}<br>
+  lastname : {{ user.last_name }}<br>
+  nickname : {{ user.nickname }}<br>
+</p>
+<a class="lead" href="{% url 'logout' %}">Log out</a><br>
+{% include 'mycomponents/testbutton.html' with text="ホームです．" %}<br>
+<a class="lead" href="{% url 'capture' %}">撮影ページ</a><br>
+<a class="lead" href="{% url 'comfirm' %}">確認ページ</a><br>
+<a class="lead" href="{% url 'analyzing' %}">解析ページ</a><br>
+<a class="lead" href="{% url 'score' 0 %}">成績閲覧ページ</a><br>
+<a class="lead" href="{% url 'scoredetail' 0 %}">詳細閲覧ページ</a><br>
+<a class="lead" href="admin/">管理者ページ</a><br>
+
+<p>
+  履歴一覧をここに入れたい<br>
+  {% for p in papers %}
+    履歴：id={{p.id}}
+    {% include 'mycomponents/linkbutton.html' with text=p.pub_date href='score/'|addstr:p.id|addstr:'/' %}<br>
+  {% empty %}
+    <p>履歴はありません</p>
+  {% endfor %}
+</p>
+{% endblock %}

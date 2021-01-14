@@ -1,0 +1,17 @@
+{% load sass_tags %}
+<!DOCTYPE html>
+<html lang="jp" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{% sass_src 'grade/scss/style.scss' %}">
+    {% block head_extends %}{% endblock %}
+    <title>{% block title %}Main Layout{% endblock %} - カキカタ先生</title>
+  </head>
+  <body>
+    {% block content %}
+    <p>This is My Layout.</p>
+    {% endblock %}
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    {% block js_extends %}{% endblock %}
+  </body>
+</html>

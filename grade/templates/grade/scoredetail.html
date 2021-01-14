@@ -1,0 +1,29 @@
+{% extends 'grade/layout.html' %}
+{% block title %}詳細{% endblock %}
+{% block content %}
+<a class="lead" href="{% url 'home' %}">ホームに戻る</a><br>
+{% include 'mycomponents/testbutton.html' with text="詳細！！！" %}<br>
+
+{% if score %}
+<p>
+  スコア情報 <br>
+  id={{score.id}}, score={{score.score}} <br>
+  ここに画像
+</p>
+{% else %}
+<p>
+  不正なアクセスです．
+</p>
+{% endif %}
+
+<p>
+  詳細一覧<br>
+  {% for sd in scoredetails %}
+    詳細 <br>
+    id={{sd.id}}, label={{sd.label}}, message={{sd.message}}, scoredetail={{sd.scoredetail}}<br>
+  {% empty %}
+    <p>スコアが登録されていません</p>
+  {% endfor %}
+</p>
+
+{% endblock %}
