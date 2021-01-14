@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '8$6f$#@9%7un_*r2n#unxc0&0n#*=%7ua#_ekixjozt56ozj4h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -163,6 +163,15 @@ AUTH_USER_MODEL = 'account.User'
 
 # for local environment
 try:
-    from local_settings import *
+    from .local_settings import *
 except ImportError:
     pass
+
+if not DEBUG:
+    import django_heroku
+    import dj_database_url
+    django_heroku.settings(locals())
+    db_from_env = dj_database_url.config()
+    DATABASES = {
+        'default' : dj_database_url.config()
+    }

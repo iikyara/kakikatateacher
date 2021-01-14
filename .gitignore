@@ -1,5 +1,7 @@
-db.sqlite3
-__pychache__/
+__pychache__
+staticfiles
 local_settings.py
+db.sqlite3
+*.py[co]
 **/.sass-cache
 **/.sass-cache/*
