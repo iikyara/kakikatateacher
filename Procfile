@@ -1,1 +1,1 @@
-web: gunicorn kakikatateacher.wsgi bot:app --log-file -
+web: gunicorn KakikataTeacher.wsgi bot:app --log-file -
