@@ -1,5 +1,6 @@
 {% extends 'grade/layout.html' %}
 {% load grade_extras %}
+{% load static %}
 {% block title %}HOME{% endblock %}
 {% block content %}
 <p class="display-4">Hello,
@@ -11,19 +12,42 @@
 <a class="lead" href="{% url 'logout' %}">Log out</a><br>
 {% include 'mycomponents/testbutton.html' with text="ホームです．" %}<br>
 <a class="lead" href="{% url 'capture' %}">撮影ページ</a><br>
-<a class="lead" href="{% url 'comfirm' %}">確認ページ</a><br>
+<!--<a class="lead" href="% url 'comfirm' %}">確認ページ</a><br>-->
 <a class="lead" href="{% url 'analyzing' %}">解析ページ</a><br>
 <a class="lead" href="{% url 'score' 0 %}">成績閲覧ページ</a><br>
 <a class="lead" href="{% url 'scoredetail' 0 %}">詳細閲覧ページ</a><br>
 <a class="lead" href="admin/">管理者ページ</a><br>
 
 <p>
+  スコアランキング
+  {% for s in scores %}
+    <p>
+      スコア <br>
+      score={{s.score}} <br>
+      <img name="kanji_img" src="{% static 'grade/image/loading.png' %}" alt="{{s.kanji}}" onload="this.kanji_id={{s.img.id}};"> <br>
+
+      {% include 'mycomponents/linkbutton.html' with text="詳細を見る" href='/scoredetail/'|addstr:s.id|addstr:'/' %}<br>
+    </p>
+  {% empty %}
+    <p>スコアが存在しません</p>
+  {% endfor %}
+</p>
+
+<p>
   履歴一覧をここに入れたい<br>
   {% for p in papers %}
-    履歴：id={{p.id}}
-    {% include 'mycomponents/linkbutton.html' with text=p.pub_date href='score/'|addstr:p.id|addstr:'/' %}<br>
+    <p>
+      履歴：id={{p.id}} <br>
+      日付：{{p.pub_date}} <br>
+      漢字：{% for k in p.kanjis %}{{k}},{% endfor %} <br>
+      {% include 'mycomponents/linkbutton.html' with text='詳細を見る' href='score/'|addstr:p.id|addstr:'/' %}<br>
+    </p>
   {% empty %}
     <p>履歴はありません</p>
   {% endfor %}
 </p>
+{% endblock %}
+
+{% block js_extends %}
+<script type="text/javascript" src="{% static 'grade/js/home.js' %}"></script>
 {% endblock %}

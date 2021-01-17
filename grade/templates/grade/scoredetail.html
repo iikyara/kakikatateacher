@@ -1,4 +1,5 @@
 {% extends 'grade/layout.html' %}
+{% load static %}
 {% block title %}詳細{% endblock %}
 {% block content %}
 <a class="lead" href="{% url 'home' %}">ホームに戻る</a><br>
@@ -18,12 +19,49 @@
 
 <p>
   詳細一覧<br>
-  {% for sd in scoredetails %}
-    詳細 <br>
-    id={{sd.id}}, label={{sd.label}}, message={{sd.message}}, scoredetail={{sd.scoredetail}}<br>
-  {% empty %}
-    <p>スコアが登録されていません</p>
-  {% endfor %}
+  <p>
+    フェーズ1
+    {% for sd in phase1 %}
+      <p>
+        詳細 <br>
+        id={{sd.id}}, result={{sd.result}}, message={{sd.message}} <br>
+        <img name="kanji_img" src="{% static 'grade/image/loading.png' %}" alt="{{score.kanji}}" onload="this.kanji_id={{sd.img.id}}"> <br>
+      </p>
+    {% empty %}
+      <p>スコアが登録されていません</p>
+    {% endfor %}
+  </p>
+
+  <p>
+    フェーズ2
+    {% for sd in phase2 %}
+      <p>
+        詳細 <br>
+        id={{sd.id}}, result={{sd.result}}, message={{sd.message}} <br>
+        <img name="kanji_img" src="{% static 'grade/image/loading.png' %}" alt="{{score.kanji}}" onload="this.kanji_id={{sd.img.id}}"> <br>
+      </p>
+    {% empty %}
+      <p>スコアが登録されていません</p>
+    {% endfor %}
+  </p>
+
+  <p>
+    フェーズ3
+    {% for sd in phase3 %}
+      <p>
+        詳細 <br>
+        id={{sd.id}}, result={{sd.result}}, message={{sd.message}} <br>
+        <img name="kanji_img" src="{% static 'grade/image/loading.png' %}" alt="{{score.kanji}}" onload="this.kanji_id={{sd.img.id}}"> <br>
+      </p>
+    {% empty %}
+      <p>スコアが登録されていません</p>
+    {% endfor %}
+  </p>
+
 </p>
 
+{% endblock %}
+
+{% block js_extends %}
+<script type="text/javascript" src="{% static 'grade/js/scoredetail.js' %}"></script>
 {% endblock %}

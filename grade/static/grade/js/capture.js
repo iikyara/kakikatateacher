@@ -6,6 +6,8 @@ let height = snapshotCanvas.height;
 let c_width, c_height;
 let isResizing = false;
 
+/* 画像撮影用 */
+
 let startScan = function(callback) {
   const canvasContext = snapshotCanvas.getContext("2d");
   canvasContext.drawImage(player, 0, 0, width, height);
@@ -13,7 +15,7 @@ let startScan = function(callback) {
   var img = new Image();
   img.src = imgurl;
   snapshotImage = img;
-  console.log(player.videoWidth, player.videoHeight);  
+  console.log(player.videoWidth, player.videoHeight);
 };
 
 let handleSuccess = function(stream) {
@@ -81,6 +83,233 @@ let resizeEL = function(){
 
 window.addEventListener('resize', resizeEL, false);
 resizeEL();
+
+/* 変換 */
+let canvasToBlob = function(canvas){
+  var type = 'image/png';
+  var dataurl = canvas.toDataURL(type);
+  var bin = atob(dataurl.split(',')[1]);
+  var buffer = new Uint8Array(bin.length);
+  for(var i = 0; i < bin.length; i++){
+    buffer[i] = bin.charCodeAt(i);
+  }
+  var blob = new Blob([buffer.buffer], {type: type});
+  return blob;
+}
+
+/* 画像送信用 */
+
+let sendImageUrl = "/analyzing/";
+
+// csrf_tokenの取得に使う
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+let sendImage = function(){
+  //csrf_tokenを取得
+  var csrf_token = getCookie("csrftoken");
+  console.log(csrf_token);
+  var data = {
+    data : snapshotCanvas.toDataURL("image/png"),
+  };
+  var param = {
+    method: "POST",
+    headers:{
+      "csrfmiddlewaretoken" : csrf_token,
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    body: JSON.stringify(data)
+  };
+
+  let file = canvasToBlob(snapshotCanvas);
+  let fd = new FormData();
+  fd.append('image', file);
+
+  console.log(file.size);
+
+  $.ajax({
+    type: "POST",
+    url: sendImageUrl,
+    data: data,
+    contentType: "application/json; charset=utf-8",
+    beforeSend: function(xhr, settings){
+      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+          xhr.setRequestHeader("X-CSRFToken", csrf_token);
+      }
+    },
+    success: function(data){
+      console.log(data);
+      json = data
+      if(json.isSuccess){
+        console.log("ええ感じ");
+      }
+      else{
+        console.log("解析でエラー");
+      }
+    },
+    error: function(xhr, status, error){
+      console.log(status + "\n" + "Status: " + xhr.status + "\n" + error);
+    }
+  });
+};
+
+function hexToBase64(str) {
+    return btoa(String.fromCharCode.apply(null, str.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" ")));
+}
+
+function decodeImageBuffer(buffer){
+  var mime;
+  console.log(buffer);
+  console.log(typeof buffer);
+  var a = new Uint8Array(buffer);
+  console.log(a);
+  var nb = a.length;
+  console.log(nb);
+  if (nb < 4)
+    return null;
+  var b0 = a[0];
+  var b1 = a[1];
+  var b2 = a[2];
+  var b3 = a[3];
+  if (b0 == 0x89 && b1 == 0x50 && b2 == 0x4E && b3 == 0x47)
+    mime = 'image/png';
+  else if (b0 == 0xff && b1 == 0xd8)
+    mime = 'image/jpeg';
+  else if (b0 == 0x47 && b1 == 0x49 && b2 == 0x46)
+    mime = 'image/gif';
+  else
+    return null;
+  var binary = "";
+  for (var i = 0; i < nb; i++)
+    binary += String.fromCharCode(a[i]);
+  var base64 = window.btoa(binary);
+  return 'data:' + mime + ';base64,' + base64;
+}
+
+var showImageByCreateObjectURL = function(blob){
+  var img = document.getElementById("result");
+  var url = window.URL || window.webkitURL;
+  img.src = url.createObjectURL(blob);
+}
+
+var loadBinaryImage = function(path, cb, type) {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function(){
+    if (this.readyState == 4 && this.status == 200) {
+      cb(this.response);
+    }
+  }
+  xhr.open('GET', path);
+  xhr.responseType = type || 'blob';
+  xhr.send();
+}
+
+loadBinaryImage("/kanji_image/1/", showImageByCreateObjectURL, null);
+
+let getImage = function(id){
+  // 送信
+  $.ajax({
+      url: "/kanji_image/" + id + "/",
+      type: "GET",
+      processData: false,
+      contentType: false,
+      responseType: "blob",
+
+      // 送信前
+      beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+              xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+          }
+      },
+      // 応答後
+      complete: function(xhr, textStatus) {
+
+      },
+
+      // 通信成功時の処理
+      success: function(result, textStatus, xhr) {
+        //console.log(result);
+        document.getElementById('result').src = decodeImageBuffer(result);
+      },
+
+      // 通信失敗時の処理
+      error: function(xhr, textStatus, error) {}
+  });
+};
+
+
+jQuery(function($) {
+  //var csrf_token = getCookie("csrftoken");
+    $('#imageform_form').submit(function(event) {
+        // HTMLでの送信をキャンセル
+        event.preventDefault();
+
+        // 操作対象のフォーム要素を取得
+        var $form = $(this);
+
+        // 送信ボタンを取得
+        // （後で使う: 二重送信を防止する。）
+        var $button = $form.find('button');
+
+        var formData = new FormData($(this).get(0));
+
+        // 送信
+        $.ajax({
+            url: $form.attr('action'),
+            type: $form.attr('method'),
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: "json",
+
+            // 送信前
+            beforeSend: function(xhr, settings) {
+                // ボタンを無効化し、二重送信を防止
+                $button.attr('disabled', true);
+
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+                }
+            },
+            // 応答後
+            complete: function(xhr, textStatus) {
+                // ボタンを有効化し、再送信を許可
+                $button.attr('disabled', false);
+            },
+
+            // 通信成功時の処理
+            success: function(result, textStatus, xhr) {
+              console.log(result);
+              if(result.isSuccess){
+                getImage(result.id);
+              }
+            },
+
+            // 通信失敗時の処理
+            error: function(xhr, textStatus, error) {}
+        });
+    });
+});
+
+//getImage(1);
 
 //画像フォームのやつ
 /*

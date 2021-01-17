@@ -1,0 +1,3 @@
+[submodule "exlibs/ai_review_char"]
+	path = exlibs/ai_review_char
+	url = https://github.com/teruto725/ai_review_char
