@@ -1,14 +1,221 @@
-div{
-  background: red;
-  width: 400px;
-  height: 400px;
-  p{
-    color:green;
-    font-weight: bold;
-    text-align: center;
+@import "./ColorManager.scss";
+@import './FontManager.scss';
+
+$menu-width: fontSizes(base) * 10;
+
+*, *:before, *:after {
+	padding: 0;
+	margin: 0;
+}
+ol, ul {
+	list-style: none;
+}
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+.cp_cont {
+	height: 65vh;
+
+  .cp_offcm01 {
+  	position: absolute;
+  	top: 20px;
+  	right: 20px;
+  	display: inline-block;
+
+    menu{
+      position: fixed;
+    	top: 0;
+    	right: -100vw;
+    	width: $menu-width;
+    	height: 100%;
+    	cursor: pointer;
+    	-webkit-transition: 0.53s transform;
+    	        transition: 0.53s transform;
+    	-webkit-transition-timing-function: cubic-bezier(.38,.52,.23,.99);
+    	        transition-timing-function: cubic-bezier(.38,.52,.23,.99);
+    	background-color: #607D8B;
+    	opacity: 0.8;
+      z-index: 800;
+
+      ul{
+        margin: 0;
+      	padding: 0;
+
+        li{
+          list-style: none;
+
+          a{
+            display: block;
+          	padding: 20px;
+          	text-decoration: none;
+          	color: #ffffff;
+          	border-bottom: 1px solid #ffffff;
+          }
+        }
+      }
+    }
+
+    #cp_toggle01{
+      position: fixed;
+      top: 0;
+      display: none;
+      opacity: 0;
+
+      z-index: 900;
+
+      &:checked ~ menu{
+        -webkit-transform: translateX(-100vw);
+      	        transform: translateX(-100vw);
+      }
+
+      & ~ label{
+        position: fixed;
+        top: 0;
+        right: 0;
+        display: block;
+      	padding: 0.5em;
+      	cursor: pointer;
+      	-webkit-transition: 0.5s transform;
+      	        transition: 0.5s transform;
+      	-webkit-transition-timing-function: cubic-bezier(.61,-0.38,.37,1.27);
+      	        transition-timing-function: cubic-bezier(.61,-0.38,.37,1.27);
+      	text-align: center;
+      	color: #333333;
+        z-index: 900;
+      }
+
+      &:checked ~ label{
+        -webkit-transform: translateX(-$menu-width);
+      	        transform: translateX(-$menu-width);
+        z-index: 900;
+      }
+
+      & ~ label::before{
+        font-family: 'Font Awesome 5 Free';
+      	content: '\f0c9';
+        font-weight: 900;
+      	font-size: fontSizes(icon, big);
+        z-index: 900;
+      }
+
+      &:checked ~ label::before{
+        content: '\f00d';
+        z-index: 900;
+      }
+    }
+  }
+
+  /* contents */
+  .cp_contents {
+    margin: 10px;
+  }
+
+  .footspace{
+    display: inline-block;
+    height: 5em;
   }
 }
 
-p{
-  border: medium solid #000;
+footer{
+  position: fixed;
+  width: 100%;
+  bottom: 0px;
+  //opacity: 0.9;
+  z-index: 99;
+
+  $fsize: 3rem;
+  $sidesize: $fsize * 1.1;
+
+  ul{
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: $fsize;
+
+    li{
+      justify-content: center;
+      align-items: center;
+      flex-grow: 1;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+
+      button{
+        position: relative;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        font-size: fontSizes(icon);
+        font-weight: 900;
+        color: palettes(white);
+        text-align: center;
+        background-color: palettes(base);
+        border-right: 1px solid palettes(white);
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        border: none;
+        outline: none;
+
+        z-index: 999;
+
+        &:hover{
+          background-color: darken(palettes(base), 10%);
+        }
+        &:active{
+          background-color: darken(palettes(base), 10%);
+        }
+      }
+
+      .left{
+        border-radius: 0 $fsize / 2 0 0;
+        left: 0;
+      }
+
+      .right{
+        border-radius: $fsize / 2 0 0 0;
+        right: 0;
+      }
+    }
+
+    .cnt_btn{
+      $size: $fsize * 1.75;
+      $bsize: $size * 1.1;
+
+      justify-content: center;
+      align-items: center;
+      width: $size;
+      padding: 20px;
+      margin: 0;
+
+      button{
+        display: block;
+        position: relative;
+        width: $size;
+        height: $size;
+        bottom: 0;
+        text-align: center;
+        font-size: fontSizes(icon, big);
+        color: palettes(white);
+        background-color: palettes(base, dark);
+        outline: none;
+        border: none;
+        border-radius: $size / 2 $size / 2 0 0;
+        transform: translateY(-$size / 2);
+
+        z-index: 999;
+
+        &:hover{
+          background-color: darken(palettes(base, dark), 10%);
+        }
+
+        &:active{
+          background-color: darken(palettes(base, dark), 10%);
+        }
+      }
+    }
+  }
 }

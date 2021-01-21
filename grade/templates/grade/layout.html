@@ -1,19 +1,52 @@
+{% extends 'grade/base.html' %}
 {% load sass_tags %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="jp" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="{% sass_src 'grade/scss/style.scss' %}">
-    {% block head_extends %}{% endblock %}
-    <title>{% block title %}Main Layout{% endblock %} - カキカタ先生</title>
-  </head>
-  <body>
+{% block head_extends %}
+<link rel="stylesheet" href="{% sass_src 'grade/scss/style.scss' %}">
+{% endblock %}
+{% block body %}
+<div class="cp_cont">
+  <div class="cp_offcm01">
+    <input type="checkbox" id="cp_toggle01">
+    <label for="cp_toggle01"><span></span></label>
+    <menu>
+      <ul>
+        <li> <a href="#">ユーザー設定</a> </li>
+        <li> <a href="{% url 'logout' %}">ログアウト</a> </li>
+      </ul>
+    </menu>
+  </div>
+  <div class="cp_contents">
     {% block content %}
-    <p>This is My Layout.</p>
     {% endblock %}
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="{% static 'grade/js/utils.js' %}"></script>
-    {% block js_extends %}{% endblock %}
-  </body>
-</html>
+    <div class="footspace"></div>
+  </div>
+</div>
+
+<footer>
+  <ul>
+    <li>
+      <button type="button" name="button" class="left" onclick="window.location.href = '{% url 'home' %}';">
+        <i class="fas fa-home"></i>
+        ホーム
+      </button>
+    </li>
+    <div class="cnt_btn">
+      <button type="button" name="button" onclick="window.location.href = '{% url 'capture' %}';">
+        <i class="fas fa-camera"></i>
+      </button>
+    </div>
+    <li>
+      <button type="button" name="button" class="right" onclick="window.location.href = '{% url 'history' %}';">
+        <i class="fas fa-file-alt"></i>
+        きろく
+      </button>
+    </li>
+  </ul>
+</footer>
+{% endblock %}
+
+{% block js_extends %}
+{{block.super}}
+<script type="text/javascript" src="{% static 'grade/js/layout.js' %}"></script>
+{% endblock %}

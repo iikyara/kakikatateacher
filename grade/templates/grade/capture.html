@@ -1,8 +1,80 @@
 {% extends 'grade/layout.html' %}
-{% load static %}
-{% block title %}撮影{% endblock %}
-{% block content %}
 
+{% load sass_tags %}
+{% load static %}
+
+{% block head_extends %}
+{{block.super}}
+<link rel="stylesheet" href="{% sass_src 'grade/scss/capture.scss' %}">
+{% endblock %}
+
+{% block title %}撮影{% endblock %}
+
+{% block content %}
+{{block.super}}
+<div class="container">
+  <div class="head_space">
+    <h1>
+      さいてん
+    </h1>
+    <p>
+      カメラで ワークシートを さつえいして きみが かいた しゃしんを さいてんしよう！
+    </p>
+    <br>
+  </div>
+
+  <div name="section1" class="section1">
+    <form id="imageform_form" enctype="multipart/form-data" method="POST" action="/analyzing/">
+      {% csrf_token %}
+      <input type="file" name="pic" id="imageform_selector" dropzone="copy" required class="file_upload">
+      <label class="imageform_selector" for="imageform_selector" id="imageform_selector-label">
+        ここを タップして <br>
+        しゃしんを とろう！
+      </label>
+      <input type="hidden" name="rotate" value="0">
+      <button id="submit_button" type="submit" name="button"></button>
+    </form>
+  </div>
+
+  <div name="section3" class="section3">
+    さいてんちゅう <br>
+    ちょっとまってね
+  </div>
+
+  <div name="section4" class="section4">
+    ごめんなさい <br>
+    がぞうが うまく よみこめませんでした <br>
+    <button type="button" name="button" onclick="retake();">もういっかい</button>
+  </div>
+
+  <div class="footspace2"></div>
+</div>
+
+<input type="checkbox" id="section2-toggle">
+<div name="section2" class="section2">
+  <p>うえむきに なるように ほうこうを なおしてね</p>
+  <div class="sec2-container">
+    <div class="snapshot">
+      <img src="{% static 'grade/image/work6.png' %}" id="snapshot" alt="撮影">
+    </div>
+
+    <div class="buttons">
+      <button type="button" name="button" onclick="rotate(true)" id="rotate-right-button"><i class="fas fa-redo-alt"></i></button>
+      <button type="button" name="button" onclick="rotate(false)" id="rotate-left-button"><i class="fas fa-undo-alt"></i></button>
+      <button type="button" name="button" onclick="sendImage();" id="analyzing-button">さいてんする</button>
+      <button type="button" name="button" onclick="retake();"  id="retake-button">もどる</button>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block js_extends %}
+{{block.super}}
+<script type="text/javascript" src="{% static 'grade/js/capture.js' %}"></script>
+{% endblock %}
+
+{% comment "テスト記述" %}
 <a class="lead" href="{% url 'home' %}">ホームに戻る</a><br>
 {% include 'mycomponents/testbutton.html' with text="撮影！！！" %}<br>
 
@@ -35,5 +107,8 @@
 {% endblock %}
 
 {% block js_extends %}
+{{block.super}}
 <script type="text/javascript" src="{% static 'grade/js/capture.js' %}"></script>
 {% endblock %}
+
+{% endcomment %}

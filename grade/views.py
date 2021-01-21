@@ -1,25 +1,57 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse, QueryDict
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate
 import cv2
 import io
 import numpy as np
 from PIL import Image as PILImage
-from exlibs.ai_review_char.execute import execute_debug as kanji_analyze
+from exlibs.ai_review_char.execute import execute as kanji_analyze
 from .models import *
+from .forms import UserCreateForm as SignUpForm
 from account.models import User
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            #フォームから'username'を読み取る
+            username = form.cleaned_data.get('username')
+            #フォームから'password1'を読み取る
+            password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return redirect('/')
+    else:
+        form = SignUpForm()
+
+    context = {'form':form}
+    return render(request, 'registration/signup.html', context)
 
 @login_required()
 def home(request):
     papers = Paper.objects.filter(author=request.user)
     for p in papers:
         p.kanjis = p.kanjilist()
+        p.average = p.average()
     scores = Score.get_top_n(request.user, 10)
     contents = {
         'scores' : scores,
         'papers' : papers,
     }
     return render(request, 'grade/home.html', contents)
+
+@login_required
+def history(request):
+    papers = Paper.objects.filter(author=request.user)
+    for p in papers:
+        p.kanjis = p.kanjilist()
+        p.average = p.average()
+    contents = {
+        'papers' : papers,
+    }
+    return render(request, 'grade/history.html', contents)
 
 @login_required()
 def capture(request):
@@ -75,6 +107,7 @@ def analyzing(request):
     #dic = QueryDict(request.body, encoding='utf-8')
     #image = dic.get('data')
     image = request.FILES.get('pic')
+    rot = int(request.POST.get('rotate'))
     #img = cv2.imread(image)
     print(image.name)
     print(image.size)
@@ -98,7 +131,16 @@ def analyzing(request):
         )
 
     #test analyzing
-    img = cv2.imread('./grade/static/grade/image/work6.png')
+    #img = cv2.imread('./grade/static/grade/image/work6.png')
+    print("rotate image")
+    rot_set = [
+        None,
+        cv2.ROTATE_90_CLOCKWISE,
+        cv2.ROTATE_180,
+        cv2.ROTATE_90_COUNTERCLOCKWISE,
+    ]
+    if rot_set[rot] is not None:
+        img = cv2.rotate(img, rot_set[rot])
     print(img.shape[:3])
     result = kanji_analyze(img)
     print(result)
@@ -124,10 +166,10 @@ def analyzing(request):
 @login_required
 def download_image(request, image_id):
     image = Image.objects.all()
-    print(image)
+    #print(image)
     image = image[0] if len(image)!=0 else None
     response = HttpResponse()
-    print(image)
+    #print(image)
     if image != None:
         response.content = image.body
 

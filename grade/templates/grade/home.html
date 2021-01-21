@@ -1,9 +1,125 @@
 {% extends 'grade/layout.html' %}
+{% load sass_tags %}
 {% load grade_extras %}
 {% load static %}
+{% block head_extends %}
+{{block.super}}
+  <link rel="stylesheet" href="{% sass_src 'grade/scss/home.scss' %}">
+{% endblock %}
 {% block title %}HOME{% endblock %}
 {% block content %}
-<p class="display-4">Hello,
+{{block.super}}
+<div class="contents">
+  <h2>
+    こんにちは、
+
+    {% if user.nickname %}
+    {{user.nickname}}
+    {% else %}
+    {{user.username}}
+    {% endif %}
+
+    さん。
+  </h2>
+
+  <div class="ranking">
+    <h1>
+      <i class="fas fa-crown"></i>
+      スコアランキング
+    </h1>
+    <div class="slider">
+      <div class="slides">
+
+        {% for s in scores %}
+
+        <div class="slide">
+          <div class="rank">
+            No.{{forloop.counter}}
+          </div>
+          <div class="outer">
+            <a href="/scoredetail/{{s.id}}/" class="score_carousel">
+              <img name="kanji_img" src="{% static 'grade/image/loading.png' %}" alt="{{s.kanji}}" onload="this.kanji_id={{s.img.id}};">
+              <div class="score_panel">
+                <div class="score">
+                  {{s.score|floatformat:0}}
+                </div>
+                <div class="ten">
+                  てん
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        {% empty %}
+
+        <p>スコアが存在しません</p>
+
+        {% endfor %}
+
+      </div>
+    </div>
+  </div>
+
+  <div class="history">
+    <h1>
+      <i class="fas fa-file-alt"></i>
+      いままでのワーク
+    </h1>
+    <p>
+      おすと いままでの きろくを みれるよ。
+    </p>
+    <table class="history_table">
+
+      <tr>
+        <th>ひにち</th>
+        <th>かんじ</th>
+        <th>スコア</th>
+      </tr>
+
+      {% for p in papers %}
+
+      <tr onclick="window.location.href = '/score/{{p.id}}/';">
+        <td>{{p.pub_date|date:"Y/m/j"}}</td>
+        <td>
+          {% for k in p.kanjis %}
+            {% if forloop.first %}
+              {{k}}
+            {% else %}
+              , {{k}}
+            {% endif %}
+          {% endfor %}
+        </td>
+        <td>{{p.average|floatformat:0}}</td>
+      </tr>
+
+      {% empty %}
+
+        <p>履歴はありません</p>
+
+      {% endfor %}
+
+    </table>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block js_extends %}
+{{block.super}}
+<script type="text/javascript" src="{% static 'grade/js/home.js' %}"></script>
+{% endblock %}
+
+{% comment "テスト記述" %}
+
+<p class="display-4">
+  Hello,
+  {% if user.nickname %}
+  {{user.nickname}}
+  {% else %}
+  {{user.username}}
+  {% endif %}
+  <br>
   username : {{ user.username }}<br>
   firstname : {{ user.first_name }}<br>
   lastname : {{ user.last_name }}<br>
@@ -35,19 +151,25 @@
 
 <p>
   履歴一覧をここに入れたい<br>
+
   {% for p in papers %}
     <p>
       履歴：id={{p.id}} <br>
       日付：{{p.pub_date}} <br>
+      得点：{{p.average}} <br>
       漢字：{% for k in p.kanjis %}{{k}},{% endfor %} <br>
       {% include 'mycomponents/linkbutton.html' with text='詳細を見る' href='score/'|addstr:p.id|addstr:'/' %}<br>
     </p>
   {% empty %}
     <p>履歴はありません</p>
   {% endfor %}
+
 </p>
 {% endblock %}
 
 {% block js_extends %}
+{{block.super}}
 <script type="text/javascript" src="{% static 'grade/js/home.js' %}"></script>
 {% endblock %}
+
+{% endcomment %}

@@ -1,0 +1,21 @@
+.triangle{
+  position: relative;
+  width: 0;
+  height: 0;
+  border-left: $triSize / 2 solid transparent;
+  border-right: $triSize / 2 solid transparent;
+  border-bottom: $triSize / 2 * 1.732 solid $triColor;
+
+  &::after{
+    content: "";
+    position: absolute;
+    top: $triThick * 1.2;
+    left: $triThick - $triSize / 2;
+
+    width: 0;
+    height: 0;
+    border-left: $triSize / 2 - $triThick solid transparent;
+    border-right: $triSize / 2 - $triThick solid transparent;
+    border-bottom: ($triSize / 2 - $triThick) * 1.732 solid $triBG;
+  }
+}

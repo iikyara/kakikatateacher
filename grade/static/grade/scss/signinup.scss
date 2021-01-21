@@ -1,0 +1,206 @@
+@import "./ColorManager.scss";
+@import './FontManager.scss';
+
+.container{
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  flex:{
+    direction: column;
+    wrap: wrap;
+  }
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+
+  h2{
+    margin: 0;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  $width: 17rem;
+
+  form{
+
+    .field{
+      width: $width;
+      border-bottom: 2px solid palettes(base, dark);
+      margin-bottom: 16px;
+
+      display: flex;
+      flex:{
+        direction: row;
+        wrap: wrap;
+      }
+      justify-content: space-around;
+      align-content: space-around;
+
+      .field-name{
+        margin: 0;
+        width: 50%;
+        font-size: 0.7rem;
+        color: palettes(base, dark);
+      }
+      .error{
+        margin: 0;
+        width: 50%;
+        font-size: 0.7rem;
+        color: palettes(letter, red);
+      }
+
+      i{
+        width: 1rem;
+        height: 1rem;
+
+        margin-right: 8px;
+
+        font-size: 1rem;
+        color: palettes(base, dark);
+
+        display: flex;
+        justify-content: center;
+        align-content: center;
+      }
+
+      input{
+        margin: 0;
+        padding: 0;
+        background-color: rgba(0, 0, 0, 0);
+        color: palettes(base, dark);
+        font-size: 1rem;
+        border: none;
+        outline: none;
+
+        flex:{
+          grow: 1;
+          shrink: 1;
+        }
+
+        &:-webkit-autofill{
+          background-color: palettes(letter, yellow);
+          color: palettes(base, dark);
+          /* ここで指定しているbackground-colorは黄色い背景色のことです */
+          -webkit-transition: background-color 9999s;
+          transition: background-color 9999s;
+        }
+      }
+
+    }
+
+    .error{
+      margin: 0;
+      width: 100%;
+      font-size: 0.7rem;
+      color: palettes(letter, red);
+    }
+
+    button{
+      margin: 0;
+      padding: 0;
+      width: $width;
+      display: block;
+      cursor: pointer;
+      height: 2rem;
+      font-weight: 700;
+      color: palettes(white);
+      font-size: 1rem;
+      background-color: palettes(base, dark);
+      border:{
+        radius: 2rem;
+        style: none;
+      }
+      outline: none;
+    }
+  }
+
+  .other{
+    width: $width;
+
+    display: flex;
+    flex:{
+      direction: column;
+      wrap: nowrap;
+    }
+
+    .other-method{
+      display: flex;
+      flex:{
+        direction: column;
+        wrap: nowrap;
+      }
+      align-content: center;
+      justify-content: center;
+      align-items: center;
+
+      p{
+        color: palettes(gray);
+        font-size: 1rem;
+      }
+
+      a{
+        margin: 0;
+        padding: 0;
+        width: $width;
+        height: 2rem;
+        font-weight: 700;
+        cursor: pointer;
+        color: palettes(white);
+        font-size: 1rem;
+        border:{
+          radius: 2rem;
+          style: none;
+        }
+        outline: none;
+        text-decoration: none;
+        text-align: center;
+
+        display: flex;
+        justify-content: center;
+        align-content: center;
+
+        vertical-align: middle;
+
+        &:link{
+          background-color: palettes(letter, red);
+        }
+
+        &:visited{
+          background-color: palettes(letter, red);
+        }
+      }
+
+      .method-google{
+        background-color: palettes(letter, red);
+
+        &:active{
+          background-color: darken(palettes(letter, red), 10%);
+        }
+
+        &:link{
+          background-color: palettes(letter, red);
+        }
+
+        &:visited{
+          background-color: palettes(letter, red);
+        }
+      }
+
+      .method-signup{
+        background-color: palettes(letter, blue);
+
+        &:active{
+          background-color: darken(palettes(letter, blue), 10%);
+        }
+
+        &:link{
+          background-color: palettes(letter, blue);
+        }
+
+        &:visited{
+          background-color: palettes(letter, blue);
+        }
+      }
+    }
+  }
+}

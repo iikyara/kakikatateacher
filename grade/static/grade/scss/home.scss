@@ -1,0 +1,63 @@
+@import "./ColorManager.scss";
+@import './FontManager.scss';
+
+@import "./components/history_table.scss";
+
+h1{
+  margin:{
+    bottom: fontSizes(base);
+  }
+}
+
+.slider {
+  position: relative;
+  left: -10px;
+  width: 100vw;
+  text-align: center;
+  overflow: hidden;
+  margin: {
+    top: 30px;
+    bottom: 20px;
+  }
+
+  $imgSize: fontSizes(base) * 6;
+  $tenSize: fontSizes(base) * 3;
+
+  .slides {
+    display: flex;
+
+    height: $imgSize + $tenSize + 3;
+
+    overflow-y: hidden;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: transparent;
+      border-radius: 10px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .slide{
+      .rank{
+        width: $imgSize;
+        text-align: center;
+        margin:{
+          left: 50px;
+          bottom: 8px;
+        }
+      }
+
+      @import './components/score.scss';
+    }
+  }
+}

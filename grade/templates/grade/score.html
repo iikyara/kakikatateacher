@@ -1,8 +1,109 @@
 {% extends 'grade/layout.html' %}
+
 {% load grade_extras %}
+{% load sass_tags %}
 {% load static %}
+
+{% block head_extends %}
+{{block.super}}
+<link rel="stylesheet" href="{% sass_src 'grade/scss/score.scss' %}">
+{% endblock %}
+
 {% block title %}成績{% endblock %}
+
 {% block content %}
+{{block.super}}
+<h1>
+  スコア
+</h1>
+<p>
+  ワークシートの スコア いちらん だよ <br>
+  クリックすると くわしい かいせつが みれるよ
+</p>
+<br>
+
+<div class="container">
+  <div class="container-item">
+    <div class="total_score">
+      <div class="sogo">
+        <p>そうごう</p>
+      </div>
+      <div class="score">
+        <p>{{average|floatformat:0}}</p>
+      </div>
+      <div class="ten">
+        <p>てん</p>
+      </div>
+    </div>
+    <button type="button" name="button" onclick="openStampWindow();">もういちど スタンプを じゅんびする</button>
+  </div>
+  <div class="scores">
+    <div class="scores_container">
+
+      {% for s in scores %}
+        <div class="outerouter">
+          <div class="outer">
+            <a href="/scoredetail/{{s.id}}/" class="score_carousel">
+              <img name="kanji_img" src="{% static 'grade/image/loading.png' %}" alt="{{s.kanji}}" onload="this.kanji_id={{s.img.id}};">
+              <div class="score_panel">
+                <div class="score">
+                  {{s.score|floatformat:0}}
+                </div>
+                <div class="ten">
+                  てん
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+      {% empty %}
+
+      <p>スコアが存在しません</p>
+
+      {% endfor %}
+
+    </div>
+    <div class="footspace2">
+
+    </div>
+  </div>
+</div>
+
+<input type="checkbox" id="stamp-info-toggle">
+<div class="stamp-info">
+  <p>
+    よくがんばったね！ <br>
+    さいごに スタンプを 押そう！
+  </p>
+  <div class="total_score">
+    <div class="sogo">
+      <p>そうごう</p>
+    </div>
+    <div class="score">
+      <p>{{average|floatformat:0}}</p>
+    </div>
+    <div class="ten">
+      <p>てん</p>
+    </div>
+  </div>
+  <div class="stamp-button">
+    <button type="button" name="button" class="close-button" onclick="closeStampWindwo();"><i class="far fa-times-circle"></i></button>
+    <button type="button" name="button" class="stamp-button">
+      スタンプを おす
+    </button>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block js_extends %}
+{{block.super}}
+<script type="text/javascript" src="{% static 'grade/js/score.js' %}"></script>
+{% endblock %}
+
+{% comment "テスト記述" %}
+
 <a class="lead" href="{% url 'home' %}">ホームに戻る</a><br>
 {% include 'mycomponents/testbutton.html' with text='成績！！！' %}<br>
 
@@ -35,5 +136,8 @@
 {% endblock %}
 
 {% block js_extends %}
+{{block.super}}
 <script type="text/javascript" src="{% static 'grade/js/score.js' %}"></script>
 {% endblock %}
+
+{% endcomment %}

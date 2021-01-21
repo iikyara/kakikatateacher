@@ -1,7 +1,120 @@
 {% extends 'grade/layout.html' %}
+
+{% load sass_tags %}
 {% load static %}
+
+{% block head_extends %}
+{{block.super}}
+<link rel="stylesheet" href="{% sass_src 'grade/scss/scoredetail.scss' %}">
+{% endblock %}
+
 {% block title %}詳細{% endblock %}
+
 {% block content %}
+{{block.super}}
+<div class="head_space">
+  <h1>
+    かいせつ
+  </h1>
+  <p>
+    かんじが ただしく かけているか みてみよう！
+  </p>
+  <br>
+
+</div>
+
+<div class="container">
+  <div class="image_panel">
+    <div class="kanji_image">
+      <img name="kanji_img" src="{% static 'grade/image/loading.png' %}" alt="{{score.kanji}}" onload="this.kanji_id={{score.img.id}}">
+    </div>
+    <div class="total_score">
+      <div class="sogo">
+        <p>とくてん</p>
+      </div>
+      <div class="score">
+        <p>{{score.score|floatformat:0}}</p>
+      </div>
+      <div class="ten">
+        <p>てん</p>
+      </div>
+    </div>
+  </div>
+  <div class="exp_panel">
+    <div class="exp">
+      <h2>かいせつ</h2>
+      <h3>フェーズ１</h3>
+
+      {% for sd in phase1 %}
+
+        <i class="far fa-circle"></i>
+        <i class="fas fa-times"></i>
+        <div class="triangle"></div>
+        <p>
+          id={{sd.id}}, result={{sd.result}}, message={{sd.message}} <br>
+          <img name="kanji_img" src="{% static 'grade/image/loading.png' %}" alt="{{score.kanji}}" onload="this.kanji_id={{sd.img.id}}"> <br>
+        </p>
+
+      {% empty %}
+
+        <p>スコアが登録されていません</p>
+
+      {% endfor %}
+
+      <h3>フェーズ２</h3>
+
+      {% for sd in phase2 %}
+
+        <i class="far fa-circle"></i>
+        <i class="fas fa-times"></i>
+        <div class="triangle"></div>
+
+        <p>
+          詳細 <br>
+          id={{sd.id}}, result={{sd.result}}, message={{sd.message}} <br>
+          <img name="kanji_img" src="{% static 'grade/image/loading.png' %}" alt="{{score.kanji}}" onload="this.kanji_id={{sd.img.id}}"> <br>
+        </p>
+
+      {% empty %}
+
+        <p>スコアが登録されていません</p>
+
+      {% endfor %}
+
+      <h4>フェーズ３</h4>
+
+      {% for sd in phase3 %}
+
+        <i class="far fa-circle"></i>
+        <i class="fas fa-times"></i>
+        <div class="triangle"></div>
+
+        <p>
+          詳細 <br>
+          id={{sd.id}}, result={{sd.result}}, message={{sd.message}} <br>
+          <img name="kanji_img" src="{% static 'grade/image/loading.png' %}" alt="{{score.kanji}}" onload="this.kanji_id={{sd.img.id}}"> <br>
+        </p>
+
+      {% empty %}
+
+        <p>スコアが登録されていません</p>
+
+      {% endfor %}
+
+      <div class="footerspace2"></div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block js_extends %}
+{{block.super}}
+<script type="text/javascript" src="{% static 'grade/js/scoredetail.js' %}"></script>
+{% endblock %}
+
+{% comment "テスト記述" %}
+
 <a class="lead" href="{% url 'home' %}">ホームに戻る</a><br>
 {% include 'mycomponents/testbutton.html' with text="詳細！！！" %}<br>
 
@@ -63,5 +176,8 @@
 {% endblock %}
 
 {% block js_extends %}
+{{block.super}}
 <script type="text/javascript" src="{% static 'grade/js/scoredetail.js' %}"></script>
 {% endblock %}
+
+{% endcomment %}

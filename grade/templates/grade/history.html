@@ -1,0 +1,57 @@
+{% extends 'grade/layout.html' %}
+{% load sass_tags %}
+{% load grade_extras %}
+{% load static %}
+{% block head_extends %}
+{{block.super}}
+<link rel="stylesheet" href="{% sass_src 'grade/scss/history.scss' %}">
+{% endblock %}
+{% block title %}HOME{% endblock %}
+{% block content %}
+{{block.super}}
+
+<h1>
+  きろく
+</h1>
+<p>
+  おすと いままでの きろくを みれるよ。
+</p>
+<br>
+<table class="history_table">
+
+  <tr>
+    <th>ひにち</th>
+    <th>かんじ</th>
+    <th>スコア</th>
+  </tr>
+
+  {% for p in papers %}
+
+  <tr onclick="window.location.href = '/score/{{p.id}}/';">
+    <td>{{p.pub_date|date:"Y/m/j"}}</td>
+    <td>
+      {% for k in p.kanjis %}
+        {% if forloop.first %}
+          {{k}}
+        {% else %}
+          , {{k}}
+        {% endif %}
+      {% endfor %}
+    </td>
+    <td>{{p.average|floatformat:0}}</td>
+  </tr>
+
+  {% empty %}
+
+    <p>履歴はありません</p>
+
+  {% endfor %}
+
+</table>
+
+{% endblock %}
+
+{% block js_extends %}
+{{block.super}}
+<script type="text/javascript" src="{% static 'grade/js/history.js' %}"></script>
+{% endblock %}

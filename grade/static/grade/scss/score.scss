@@ -1,0 +1,249 @@
+@import "./ColorManager.scss";
+@import './FontManager.scss';
+
+.total_score{
+  width: fontSizes(base) * 10;
+  height: fontSizes(base) * 4;
+  display: flex;
+  flex-shrink: 0;
+  flex-grow: 0;
+
+  border-bottom: 10px solid palettes(base, dark);
+  margin: 1rem;
+
+  .sogo{
+    position: relative;
+    height: 100%;
+    width: fontSizes(base) * 4;
+    p{
+      position: absolute;
+      display: inline-block;
+      text-align: center;
+      white-space: nowrap;
+      top: 0;
+      left: 50%;
+      transform: translateY(0) translateX(-50%);
+    }
+  }
+  .score{
+    position: relative;
+    height: 100%;
+    min-width: 4rem;
+    flex-grow: 1;
+    vertical-align: center;
+
+    p{
+      position: absolute;
+      display: inline-block;
+      text-align: center;
+      white-space: nowrap;
+      top: 100%;
+      left: 50%;
+      transform: translateY(-100%) translateX(-50%);
+
+      font-size: 3rem;
+      font-weight: 800;
+    }
+  }
+  .ten{
+    position: relative;
+    height: 100%;
+    width: fontSizes(base) * 2;
+    p{
+      position: absolute;
+      display: inline-block;
+      text-align: center;
+      white-space: nowrap;
+      top: 100%;
+      left: 50%;
+      transform: translateY(-100%) translateX(-50%);
+    }
+  }
+}
+
+.container{
+  width: 100%;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  overflow: hidden;
+  flex: {
+    direction: column;
+  }
+
+  @media (min-aspect-ratio: 1/1){
+    flex: {
+      direction: row;
+    }
+  }
+
+  .container-item{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+
+    button{
+      padding:{
+        top: 0.1rem;
+        bottom: 0.1rem;
+        left: 0.5rem;
+        right: 0.5rem;
+      }
+      margin-bottom: 1rem;
+      background-color: lighten(palettes(base), 8%);
+      color: darken(palettes(base), 25%);
+      cursor: pointer;
+      font-size: 1rem;
+      min-height: 1.5rem;
+      border-style: none;
+      border-radius: 0.3rem;
+      outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-content: center;
+    }
+  }
+
+  .scores{
+    height: 100%;
+    width: 100%;
+    flex-grow: 1;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scroll-snap-type: x mandatory;
+
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: transparent;
+      border-radius: 10px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .scores_container{
+      height: fontSizes(base) * 9 * 5;
+      width: 100%;
+
+      display: flex;
+      justify-content: space-around;
+      align-items: space-around;
+      align-content: space-around;
+
+      flex: {
+        direction: column;
+        wrap: wrap;
+      }
+
+      .outerouter{
+        width: auto;
+        height: 25%;
+        margin: 0;
+
+        $imgSize: fontSizes(base) * 6;
+        $tenSize: fontSizes(base) * 3;
+
+        @import "./components/score.scss";
+
+        .outer{
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+
+#stamp-info-toggle{
+  display: none;
+
+  & ~ .stamp-info{
+    position: fixed;
+    bottom:0;
+    left: 0;
+    -webkit-transform: translateY(100%);
+    transform: translateY(100%);
+
+    z-index: 999;
+
+    -webkit-transition: 0.5s transform;
+            transition: 0.5s transform;
+    -webkit-transition-timing-function: cubic-bezier(.61,-0.38,.37,1.27);
+            transition-timing-function: cubic-bezier(.61,-0.38,.37,1.27);
+  }
+
+  &:checked ~ .stamp-info{
+    -webkit-transform: translateY(0%);
+    transform: translateY(0%);
+  }
+}
+
+.stamp-info{
+  background-color: palettes(white);
+  width: 100%;
+  // height: 90vh;
+
+  border-radius: 2rem 2rem 0 0;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px;
+
+  padding:{
+    top: 1rem;
+    left: 2rem;
+    right: 2rem;
+  }
+
+  box-sizing: border-box;
+
+  .close-button{
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+
+    border: none;
+    outline: none;
+
+    font-size: 1.5rem;
+  }
+
+  .stamp-button{
+    width: 100%;
+    height: 4rem;
+
+    font-size: 2rem;
+    font-weight: 900;
+
+    background-color: palettes(base, dark);
+    outline: none;
+    border:{
+      radius: 1rem;
+      style: none;
+    }
+
+    &:active{
+      background-color: darken(palettes(base, dark), 10%);
+    }
+  }
+}
+
+.cp_cont .cp_contents .footspace{
+  display: inline-block;
+  height: 0;
+}
+
+.footspace2{
+  display: inline-block;
+  height: 5em;
+}

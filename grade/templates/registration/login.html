@@ -1,13 +1,51 @@
-{% extends 'grade/layout.html' %}
+{% extends 'grade/base.html' %}
+
+{% load sass_tags %}
+{% load static %}
+
+{% block head_extends %}
+{{block.super}}
+<link rel="stylesheet" href="{% sass_src 'grade/scss/signinup.scss' %}">
+{% endblock %}
+
 {% block title %}ログイン{% endblock%}
-{% block content %}
-<h2>Login</h2>
+
+{% block body %}
+<div class="container">
+  <h2>
+    ようこそ <br>
+    カキカタ先生へ
+  </h2>
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
+    <div class="field">
+      <p class="field-name">ユーザー名</p>
+      <p class="error">{{form.username.errors.0}}</p>
+      <i class="fas fa-user"></i>
+      {{form.username}}
+    </div>
+    <div class="field">
+      <p class="field-name">パスワード</p>
+      <p class="error">{{form.password.errors.0}}</p>
+      <i class="fas fa-key"></i>
+      {{form.password}}
+    </div>
+    {% if form.errors %}
+    <p class="error">
+      ユーザー名 または パスワードが まちがっています。
+    </p>
+    {% endif %}
+    <button type="submit">ログイン</button>
   </form>
-   <br>
-  <p><strong>-- OR --</strong></p>
-  <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a><br>
+  <div class="other">
+    <div class="other-method">
+      <p>-- ほかの ほうほうで ログイン --</p>
+      <a href="{% url 'social:begin' 'google-oauth2' %}" class="method-google">Googleアカウントをつかう</a>
+    </div>
+    <div class="other-method">
+      <p>-- はじめて ごりようのかた --</p>
+      <a href="{% url 'signup' %}" class="method-signup">ユーザーとうろく</a>
+    </div>
+  </div>
+</div>
 {% endblock %}

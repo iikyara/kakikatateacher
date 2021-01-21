@@ -1,0 +1,12 @@
+{
+	"version": 3,
+	"file": "history.css",
+	"sources": [
+		"history.scss",
+		"ColorManager.scss",
+		"FontManager.scss",
+		"components/history_table.scss"
+	],
+	"names": [],
+	"mappings": "AGAA,AAAA,cAAc,AAAA,CACZ,KAAK,CAAE,IAAI,CACX,eAAe,CAAE,QAAQ,CACzB,cAAc,CAAE,CAAC,CAiBlB,AApBD,AAKE,cALY,CAKZ,EAAE,AAAA,CACA,MAAM,CAAE,OAAO,CAChB,AAPH,AASE,cATY,CASZ,EAAE,CATJ,cAAc,CASR,EAAE,AAAA,CACJ,OAAO,CAAE,MAAM,CACf,UAAU,CAAE,MAAM,CACnB,AAZH,AAgBI,cAhBU,CAcZ,EAAE,CAEE,SAAU,CAAA,GAAG,CAAC,CACd,gBAAgB,CFfF,oBAAO,CEgBtB"
+}

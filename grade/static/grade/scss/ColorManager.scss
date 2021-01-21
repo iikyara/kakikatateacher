@@ -1,0 +1,50 @@
+// ベースになる色を変数で指定しておく。
+$color-gray: #888;
+$color-base: darken(#ffd07d, 3%);
+$color-accent: #fc6932;
+$color-icon: #fc6932;
+$color-letter: darken($color-base, 60%);
+$color-letter-blue: #6a88c2;
+$color-letter-red: #d75341;
+$color-letter-yellow: #ffd900;
+
+// 明るい色と暗い色を`lighten()`関数と`darken()`関数で指定する。
+$palettes: (
+  gray: (
+    base: $color-gray,
+    light: lighten($color-gray, 10%),
+    dark: darken($color-gray, 10%),
+  ),
+  black: (
+    base: #333,
+    light: #666,
+    dark: #111,
+  ),
+  white: (
+    base: #eee,
+    light: #fff,
+    dark: #ccc,
+  ),
+
+  //using
+  base: (
+    base: $color-base,
+    light: lighten($color-base, 17%),
+    dark: darken($color-base, 15%),
+  ),
+  letter: (
+    base: $color-letter,
+    blue: $color-letter-blue,
+    yellow: $color-letter-yellow,
+    red: $color-letter-red,
+  ),
+  icon: (
+    base: $color-icon,
+  ),
+);
+
+// `map-get()`関数をネストして値を取得する。
+// ネストしたvalueのデフォルトはbaseとする。
+@function palettes($key, $tone: base) {
+  @return map-get( map-get($palettes, $key), $tone);
+}

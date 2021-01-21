@@ -1,0 +1,16 @@
+$fontSizes: (
+  base: (
+    base: 1rem,
+    h1: 2rem,
+    h2: 1.8rem,
+    h3: 1.5rem,
+  ),
+  icon:(
+    base: 2rem,
+    big: 3rem,
+  ),
+);
+
+@function fontSizes($key: base, $tone: base) {
+  @return map-get( map-get($fontSizes, $key), $tone);
+}
