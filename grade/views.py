@@ -159,7 +159,7 @@ def analyzing(request):
     return JsonResponse(
         data={
             'isSuccess' : True,
-            'paper_id' : imageField.id
+            'paper_id' : 0
         }
     )
 
