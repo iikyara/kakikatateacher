@@ -136,6 +136,8 @@ $(function($) {
 
     var formData = new FormData($(this).get(0));
 
+    console.log(rotateField.value, mod(rot, 4));
+
     activateSection(3);
 
     console.log($form);
@@ -168,7 +170,7 @@ $(function($) {
       success: function(result, textStatus, xhr) {
         console.log(result);
         if(result.isSuccess){
-          var id = result.id;
+          var id = result.paper_id;
           window.location.href = "/score/" + id + "/?s=1";
         }
         else {

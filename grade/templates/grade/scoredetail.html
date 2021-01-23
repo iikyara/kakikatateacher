@@ -20,13 +20,19 @@
     かんじが ただしく かけているか みてみよう！
   </p>
   <br>
-
 </div>
+
+<!-- image ids -->
+<input type="hidden" id="default_img" value="{{score.img.id}}">
+<input type="hidden" id="phase1_img" value="{{phase1.img.id}}">
+<input type="hidden" id="phase2_img" value="{{phase2.img.id}}">
+<input type="hidden" id="phase3_img" value="{{phase3.img.id}}">
+<input type="hidden" id="phase4_img" value="{{score.img.id}}">
 
 <div class="container">
   <div class="image_panel">
     <div class="kanji_image">
-      <img name="kanji_img" src="{% static 'grade/image/loading.png' %}" alt="{{score.kanji}}" onload="this.kanji_id={{score.img.id}}">
+      <img id="current_img" name="kanji_img" src="{% static 'grade/image/loading.png' %}" alt="{{score.kanji}}" onload="this.kanji_id={{score.img.id}}">
     </div>
     <div class="total_score">
       <div class="sogo">
@@ -42,66 +48,221 @@
   </div>
   <div class="exp_panel">
     <div class="exp">
-      <h2>かいせつ</h2>
-      <h3>フェーズ１</h3>
 
-      {% for sd in phase1 %}
+      <!-- PHASE 1 -->
 
-        <i class="far fa-circle"></i>
-        <i class="fas fa-times"></i>
-        <div class="triangle"></div>
-        <p>
-          id={{sd.id}}, result={{sd.result}}, message={{sd.message}} <br>
-          <img name="kanji_img" src="{% static 'grade/image/loading.png' %}" alt="{{score.kanji}}" onload="this.kanji_id={{sd.img.id}}"> <br>
-        </p>
+      <h2 id="phase1_head" class="head">
+        ただしさ :
 
-      {% empty %}
+        {% if phase1.scoredetail > 49 %}
 
-        <p>スコアが登録されていません</p>
+        <strong class="good">
+          {{phase1.scoredetail|floatformat|default:0}} <div class="small">/ 50</div>
+        </strong>
 
-      {% endfor %}
+        {% else %}
 
-      <h3>フェーズ２</h3>
+        <strong class="bad">
+          {{phase1.scoredetail|floatformat|default:0}} <div class="small">/ 50</div>
+        </strong>
 
-      {% for sd in phase2 %}
+        {% endif %}
 
-        <i class="far fa-circle"></i>
-        <i class="fas fa-times"></i>
-        <div class="triangle"></div>
+      </h2>
+      <input id="phase1_advice-toggle" type="checkbox" class="advice-toggle">
+      <div class="advice">
+        <div class="ad_item">
 
-        <p>
-          詳細 <br>
-          id={{sd.id}}, result={{sd.result}}, message={{sd.message}} <br>
-          <img name="kanji_img" src="{% static 'grade/image/loading.png' %}" alt="{{score.kanji}}" onload="this.kanji_id={{sd.img.id}}"> <br>
-        </p>
+          {% if phase1.scoredetail > 25 %}
 
-      {% empty %}
+          <div class="judge">
+            <i class="far fa-circle"></i>
+          </div>
+          <p class="good">もじが ただしく かけているよ！</p>
 
-        <p>スコアが登録されていません</p>
+          {% else %}
 
-      {% endfor %}
+          <div class="judge">
+            <i class="fas fa-times"></i>
+          </div>
+          <p class="bad">おてほんを みながら もじを ただしく かいてみよう！</p>
 
-      <h4>フェーズ３</h4>
+          {% endif %}
 
-      {% for sd in phase3 %}
+        </div>
+      </div>
 
-        <i class="far fa-circle"></i>
-        <i class="fas fa-times"></i>
-        <div class="triangle"></div>
+      <!-- PHASE 2 -->
 
-        <p>
-          詳細 <br>
-          id={{sd.id}}, result={{sd.result}}, message={{sd.message}} <br>
-          <img name="kanji_img" src="{% static 'grade/image/loading.png' %}" alt="{{score.kanji}}" onload="this.kanji_id={{sd.img.id}}"> <br>
-        </p>
+      <h2 id="phase2_head" class="head">
+        バランス :
 
-      {% empty %}
+        {% if phase2.scoredetail >= 20 %}
 
-        <p>スコアが登録されていません</p>
+        <strong class="good">
+          {{phase2.scoredetail|floatformat|default:0}} <div class="small">/ 30</div>
+        </strong>
 
-      {% endfor %}
+        {% elif phase2.scoredetail >= 10 %}
 
-      <div class="footerspace2"></div>
+        <strong class="normal">
+          {{phase2.scoredetail|floatformat|default:0}} <div class="small">/ 30</div>
+        </strong>
+
+        {% else %}
+
+        <strong class="bad">
+          {{phase2.scoredetail|floatformat|default:0}} <div class="small">/ 30</div>
+        </strong>
+
+        {% endif %}
+
+      </h2>
+      <input id="phase2_advice-toggle" type="checkbox" class="advice-toggle">
+      <div class="advice">
+
+        {% if phase1.scoredetail < 25 %}
+
+          <div class="ad_item">
+            <div class="judge">
+              <i class="far fa-lightbulb"></i>
+            </div>
+            <p class="good">もじを ただしく かくと てんが もらえるよ！</p>
+          </div>
+
+        {% else %}
+
+          {% for ad in advice2 %}
+
+          <div class="ad_item">
+
+            {% if ad.label == 2 %}
+
+            <div class="judge">
+              <i class="far fa-circle"></i>
+            </div>
+            <p class="good">{{ad.message}}</p>
+
+            {% elif ad.lebel == 1 %}
+
+            <div class="judge">
+              <i class="triangle"></i>
+            </div>
+            <p class="normal">{{ad.message}}</p>
+
+            {% else %}
+
+            <div class="judge">
+              <i class="fas fa-times"></i>
+            </div>
+            <p class="bad">{{ad.message}}</p>
+
+            {% endif %}
+
+          </div>
+
+          {% endfor %}
+
+        {% endif %}
+
+      </div>
+
+      <!-- PHASE 3 -->
+
+      <h2 id="phase3_head" class="head">
+        はね、はらい、とめ :
+
+        {% if phase3.scoredetail >= 12 %}
+
+        <strong class="good">
+          {{phase3.scoredetail|floatformat|default:0}} <div class="small">/ 20</div>
+        </strong>
+
+        {% elif phase3.scoredetail >= 6 %}
+
+        <strong class="normal">
+          {{phase3.scoredetail|floatformat|default:0}} <div class="small">/ 20</div>
+        </strong>
+
+        {% else %}
+
+        <strong class="bad">
+          {{phase3.scoredetail|floatformat|default:0}} <div class="small">/ 20</div>
+        </strong>
+
+        {% endif %}
+
+      </h2>
+      <input id="phase3_advice-toggle" type="checkbox" class="advice-toggle">
+      <div class="advice">
+
+        {% if phase1.scoredetail < 25 %}
+
+          <div class="ad_item">
+            <div class="judge">
+              <i class="far fa-lightbulb"></i>
+            </div>
+            <p class="good">もじを ただしく かくと てんが もらえるよ！</p>
+          </div>
+
+        {% else %}
+
+          {% for ad in advice3 %}
+
+          <div class="ad_item">
+
+            {% if ad.label == 2 %}
+
+            <div class="judge">
+              <i class="far fa-circle"></i>
+            </div>
+            <p class="good">ばんごう：{{ad.index}}
+            {{ad.message}}</p>
+
+            {% elif ad.label == 1 %}
+
+            <div class="judge">
+              <i class="triangle"></i>
+            </div>
+            <p class="normal">ばんごう：{{ad.index}}
+            {{ad.message}}</p>
+
+            {% else %}
+
+            <div class="judge">
+              <i class="fas fa-times"></i>
+            </div>
+            <p class="bad">ばんごう：{{ad.index}}
+              {{ad.message}}</p>
+
+            {% endif %}
+
+          </div>
+
+          {% endfor %}
+
+        {% endif %}
+
+      </div>
+
+      <h2 id="phase4_head" class="head">
+        ボーナス :
+        <strong class="good">
+          {{phase4.scoredetail|floatformat|default:0}} <div class="small">/ 20</div>
+        </strong>
+      </h2>
+      <input id="phase4_advice-toggle" type="checkbox" class="advice-toggle">
+      <div class="advice">
+        <div class="ad_item">
+          <div class="judge">
+            <i class="far fa-lightbulb"></i>
+          </div>
+          <p class="good">もじ ぜんたいの きれいさで かてん されるよ</p>
+        </div>
+      </div>
+
+      <h2 id="phase5_head" class="head"></h2>
+      <div class="footspace2"></div>
     </div>
   </div>
 </div>

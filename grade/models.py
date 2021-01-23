@@ -23,6 +23,10 @@ class Paper(models.Model):
 
     def average(self):
         scores = Score.objects.filter(paper=self)
+        
+        if len(scores) == 0:
+            return 0
+
         ave = 0;
         for s in scores:
             ave += s.score
@@ -38,9 +42,6 @@ class Paper(models.Model):
 
 class Score(models.Model):
     score = models.FloatField()
-    score_p1 = models.FloatField(null=True)
-    score_p2 = models.FloatField(null=True)
-    score_p3 = models.FloatField(null=True)
     kanji = models.CharField(max_length=1)
     img = models.ForeignKey(
         Image, on_delete=models.SET_NULL,
@@ -61,15 +62,26 @@ class Score(models.Model):
 
 class ScoreDetail(models.Model):
     phase = models.IntegerField()
-    result = models.BooleanField()
-    message = models.TextField()
+    #label = models.IntegerField(null=True)
+    scoredetail = models.FloatField(null=True)
     img = models.ForeignKey(
         Image, on_delete=models.SET_NULL,
         null=True,
     )
-    #scoredetail = models.FloatField()
     score = models.ForeignKey(
         Score, on_delete=models.CASCADE,
+    )
+    author = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+    )
+
+class Advice(models.Model):
+    message = models.TextField()
+    index = models.IntegerField(null=True)
+    label = models.IntegerField(null=True)
+    scoredetail = models.ForeignKey(
+        ScoreDetail, on_delete=models.CASCADE,
     )
     author = models.ForeignKey(
         get_user_model(),

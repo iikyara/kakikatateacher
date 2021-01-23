@@ -7,6 +7,14 @@ $triColor: palettes(letter, yellow);
 $triBG: palettes(white);
 @import "./components/triangle.scss";
 
+.fa-bullseye{
+  color: palettes(letter, blue);
+}
+
+.fa-lightbulb{
+  color: palettes(letter, blue);
+}
+
 .fa-circle{
   color: palettes(letter, blue);
 }
@@ -57,6 +65,10 @@ $triBG: palettes(white);
     }
 
     .kanji_image{
+      padding: 0.8rem;
+      margin: 0.5rem;
+      background: palettes(white);
+      box-shadow: 0px 0px 8px 3px rgba(156, 156, 156, 0.73);
 
       img{
         display: block;
@@ -66,7 +78,7 @@ $triBG: palettes(white);
     }
 
     .total_score{
-      width: fontSizes(base) * 10;
+      width: fontSizes(base) * 11;
       height: fontSizes(base) * 4;
       display: flex;
 
@@ -90,7 +102,7 @@ $triBG: palettes(white);
       .score{
         position: relative;
         height: 100%;
-        min-width: 4rem;
+        min-width: 5rem;
         flex-grow: 1;
         vertical-align: center;
 
@@ -157,6 +169,85 @@ $triBG: palettes(white);
 
     .exp{
       margin: 2rem;
+
+      .good{
+        color: palettes(letter, blue);
+      }
+
+      .normal{
+        color: palettes(letter, yellow);
+      }
+
+      .bad{
+        color: palettes(letter, red);
+      }
+
+      .head{
+        cursor: pointer;
+        margin: {
+          top: 1rem;
+          bottom: 1rem;
+        }
+
+        strong{
+          .small{
+            display: inline-block;
+            font-size: 1rem;
+          }
+        }
+      }
+
+      .advice-toggle{
+        display: none;
+
+        & + .advice{
+          display: none;
+          overflow: hidden;
+
+
+          .ad_item{
+            margin: {
+              top: 0.5rem;
+              bottom: 0.5rem;
+            }
+
+            display: flex;
+            flex:{
+              direction: row;
+              wrap: nowrap;
+            }
+
+            .judge{
+              height: 1.5rem;
+              width: 2rem;
+              margin:{
+                right: 0.5rem;
+              }
+
+              flex-grow: 0;
+              flex-shrink: 0;
+
+              display: flex;
+              justify-content: center;
+              align-content: center;
+              align-items: center;
+              text-align: center;
+            }
+
+            p{
+              flex-grow: 1;
+              flex-shrink: 1;
+              line-height: 1.5rem;
+              color: palettes(black);
+              white-space: pre-line;
+            }
+          }
+        }
+
+        &:checked + .advice{
+          display: inline-block;
+        }
+      }
     }
   }
 }

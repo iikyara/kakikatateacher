@@ -1,10 +1,13 @@
 .triangle{
+  display: inline-block;
   position: relative;
   width: 0;
   height: 0;
   border-left: $triSize / 2 solid transparent;
   border-right: $triSize / 2 solid transparent;
   border-bottom: $triSize / 2 * 1.732 solid $triColor;
+
+  box-sizing: border-box;
 
   &::after{
     content: "";
