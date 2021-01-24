@@ -175,7 +175,7 @@ def analyzing(request):
 
 @login_required
 def download_image(request, image_id):
-    image = Image.objects.all()
+    image = Image.objects.filter(id=image_id)
     #print(image)
     image = image[0] if len(image)!=0 else None
     response = HttpResponse()
@@ -283,7 +283,7 @@ def _register_score(result, paper, user):
         )
 
 def cv2imgtob(cv2img):
-    cv2img = cv2.rotate(cv2img, cv2.ROTATE_90_CLOCKWISE)
+    #cv2img = cv2.rotate(cv2img, cv2.ROTATE_90_CLOCKWISE)
     cvimg = cv2.cvtColor(cv2img.astype(np.float32), cv2.COLOR_BGR2RGB)
     cvimg = cvimg.astype(np.uint8)
     image = PILImage.fromarray(cvimg)
